@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
 const { Movie, Genre } = require('../models/models');
 const { validateMovie } = require('../utils/validators');
 
