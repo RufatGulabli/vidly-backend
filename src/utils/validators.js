@@ -19,8 +19,12 @@ function validateCustomer(customer) {
 
 function validateMovie(movie) {
     const schema = Joi.object({
+        _id: Joi.string().optional(),
         title: Joi.string().required().min(3).max(50).label('Title'),
-        genreId: Joi.string().required(),
+        genre: Joi.object({
+            _id: Joi.string().required(),
+            name: Joi.string().required()
+        }),
         numberInStock: Joi.number().integer().required().min(1).max(100).label('Stock'),
         dailyRentalRate: Joi.number().required().min(0).max(10).label('Rate'),
         publishDate: Joi.date().optional(),
@@ -37,9 +41,28 @@ function validateRental(rental) {
     return schema.validate(rental);
 }
 
+function validateUser(user) {
+    const schema = Joi.object({
+        name: Joi.string().trim().required().min(3).max(64).label('Name'),
+        email: Joi.string().trim().email().required().min(3).max(255).label('Email'),
+        password: Joi.string().trim().required().min(6).max(1024).label('Password')
+    });
+    return schema.validate(user);
+}
+
+function validateAuth(user) {
+    const schema = Joi.object({
+        email: Joi.string().trim().email().required().min(3).max(255).label('Email'),
+        password: Joi.string().trim().required().min(6).max(1024).label('Password')
+    });
+    return schema.validate(user);
+}
+
 module.exports = {
     validateMovie,
     validateGenre,
     validateCustomer,
-    validateRental
+    validateRental,
+    validateUser,
+    validateAuth
 }

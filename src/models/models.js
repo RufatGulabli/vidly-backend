@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const { secretKey } = require('../config/config.json');
 
-const Genre = mongoose.model('genres', {
+const Genre = mongoose.model('genres', new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -8,9 +10,9 @@ const Genre = mongoose.model('genres', {
         maxLength: 50,
         trim: true
     }
-});
+}));
 
-const Customer = mongoose.model('customers', {
+const Customer = mongoose.model('customers', new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -28,9 +30,9 @@ const Customer = mongoose.model('customers', {
         type: Boolean,
         default: false
     }
-});
+}));
 
-const Movie = mongoose.model('movies', {
+const Movie = mongoose.model('movies', new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -63,9 +65,9 @@ const Movie = mongoose.model('movies', {
         type: Boolean,
         default: false
     }
-});
+}));
 
-const Rental = mongoose.model('rentals', {
+const Rental = mongoose.model('rentals', new mongoose.Schema({
     customer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'customers',
@@ -89,8 +91,47 @@ const Rental = mongoose.model('rentals', {
     //     min: 0,
     //     required: true
     // }
-});
+}));
 
-module.exports = {
-    Genre, Customer, Movie, Rental
+const userSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+        minLength: 3,
+        maxLength: 255,
+        trim: true,
+        unique: true,
+    },
+    name: {
+        type: String,
+        required: true,
+        minLength: 3,
+        maxLength: 64,
+        trim: true
+    },
+    password: {
+        type: String,
+        trim: true,
+        required: true,
+        minLength: 6,
+        maxLength: 1024
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
+
+});
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({
+        _id: this._id,
+        email: this.email,
+        name: this.name,
+        isAdmin: this.isAdmin
+    }, secretKey, { expiresIn: "1d" });
+    return token;
 }
+
+const User = mongoose.model('users', userSchema);
+
+module.exports = { Genre, Customer, Movie, Rental, User };

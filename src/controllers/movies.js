@@ -28,19 +28,19 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', [auth, admin], async (req, res, next) => {
     try {
         const { error } = validateMovie(req.body);
         if (error) {
             return res.status(404).json({ error: 1, message: error.details[0].message });
         }
-        const genre = await Genre.findById(req.body.genreId);
+        const genre = await Genre.findById(req.body.genre._id);
         if (!genre) {
             return res.status(404).json({ error: 1, message: 'Genre with given ID not exists.' });
         }
         const movie = new Movie({
             title: req.body.title,
-            genre: req.body.genreId,
+            genre: req.body.genre._id,
             numberInStock: req.body.numberInStock,
             dailyRentalRate: req.body.dailyRentalRate,
         });
@@ -51,22 +51,22 @@ router.post('/', async (req, res, next) => {
     }
 });
 
-router.put('/:id', async (req, res, next0) => {
+router.put('/:id', [auth, admin], async (req, res, next) => {
     try {
-
+        console.log(req.body);
         const { error } = validateMovie(req.body);
         if (error) {
             return res.status(404).json({ error: 1, message: error.details[0].message });
         }
 
-        const genre = await Genre.findById(req.body.genreId);
+        const genre = await Genre.findById(req.body.genre._id);
         if (!genre) {
             return res.status(404).json({ error: 1, message: 'Genre with given ID not exists.' });
         }
 
         const movie = await Movie.findByIdAndUpdate(req.params.id, {
             title: req.body.title,
-            genre: req.body.genreId,
+            genre: req.body.genre._id,
             numberInStock: req.body.numberInStock,
             dailyRentalRate: req.body.dailyRentalRate
         }, { new: true });
@@ -79,7 +79,7 @@ router.put('/:id', async (req, res, next0) => {
     }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', [auth, admin], async (req, res, next) => {
     try {
         const movie = await Movie.findByIdAndRemove(req.params.id);
         if (!movie) {
