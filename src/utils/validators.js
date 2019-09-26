@@ -28,7 +28,8 @@ function validateMovie(movie) {
         numberInStock: Joi.number().integer().required().min(1).max(100).label('Stock'),
         dailyRentalRate: Joi.number().required().min(0).max(10).label('Rate'),
         publishDate: Joi.date().optional(),
-        like: Joi.boolean().optional()
+        like: Joi.boolean().optional(),
+        imageUrl: Joi.string().required()
     });
     return schema.validate(movie);
 }

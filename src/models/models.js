@@ -70,6 +70,10 @@ const Movie = mongoose.model('movies', new mongoose.Schema({
     like: {
         type: Boolean,
         default: false
+    },
+    imageUrl: {
+        type: String,
+        required: true
     }
 }));
 
