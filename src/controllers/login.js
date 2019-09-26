@@ -19,7 +19,7 @@ router.post('/', async (req, res, next) => {
             return res.status(400).json({ error: 1, message: 'Incorrect email or password.' });
         }
         const token = user.generateAuthToken();
-        return res.header('x-auth-token', token).status(200).json(true);
+        return res.header('x-auth-token', token).status(200).json(token);
     } catch (exc) {
         next(exc);
     }

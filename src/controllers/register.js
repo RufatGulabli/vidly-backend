@@ -21,9 +21,20 @@ router.post('/', async (req, res, next) => {
             name: req.body.name,
             password: encryptedPassword,
         });
-        await user.save();
+        user = await user.save();
+        const userToReturn = {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin
+        };
         const token = user.generateAuthToken();
-        return res.header('x-auth-token', token).status(200).json(true);
+
+        return res
+            .header('x-auth-token', token)
+            .header('access-control-expose-headers', 'x-auth-token')
+            .status(200).json(userToReturn);
+
     } catch (exc) {
         next(exc);
     }

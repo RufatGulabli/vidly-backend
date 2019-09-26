@@ -18,7 +18,7 @@ module.exports = app => {
     app.use('/api/customers', customersController);
     app.use('/api/rentals', rentalsController);
     app.use('/api/register', registerController);
-    app.use('/api/auth', authController);
+    app.use('/api/login', authController);
     app.use(expressErrorHandler);
     app.use(pageNotFoundErrorHandler);
 }

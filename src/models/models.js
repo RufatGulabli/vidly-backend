@@ -26,6 +26,12 @@ const Customer = mongoose.model('customers', new mongoose.Schema({
         maxLength: 16,
         required: true
     },
+    email: {
+        type: String,
+        minLength: 9,
+        maxLength: 16,
+        required: true
+    },
     isGold: {
         type: Boolean,
         default: false

@@ -30,7 +30,7 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/', [auth, admin], async (req, res, next) => {
+router.post('/', [auth], async (req, res, next) => {
     try {
         const { error } = validateMovie(req.body);
         if (error) {
@@ -53,7 +53,7 @@ router.post('/', [auth, admin], async (req, res, next) => {
     }
 });
 
-router.put('/:id', [auth, admin], async (req, res, next) => {
+router.put('/:id', [auth], async (req, res, next) => {
     try {
         console.log(req.body);
         const { error } = validateMovie(req.body);
