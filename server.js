@@ -1,8 +1,8 @@
 const express = require('express');
-const { errorLogger, consoleLogger } = require('./utils/logger');
-const connectToDataBase = require('../src/database/db_connection');
+const { errorLogger } = require('./src/utils/logger');
+const connectToDataBase = require('./src/database/db_connection');
 const app = express();
-require('./routes/routes')(app);
+require('./src/routes/routes')(app);
 
 const PORT = process.env.PORT || 6789;
 
