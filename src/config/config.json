@@ -1,5 +1,4 @@
 {
-    "host": "localhost",
-    "name": "vidly",
+    "host": "mongodb+srv://Rufat:May281987@vidly-7w44y.mongodb.net/vidly?retryWrites=true&w=majority",
     "secretKey": "Q@uQpD6S5J4Uu3azvqb5q-b?X*8PSKu8"
 }
