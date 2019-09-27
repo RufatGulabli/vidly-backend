@@ -11,6 +11,7 @@ function validateGenre(genre) {
 function validateCustomer(customer) {
     const schema = Joi.object({
         name: Joi.string().required().min(3).max(64).label("Customer name"),
+        email: Joi.string().email().required().min(3).max(64).label("Customer email"),
         phone: Joi.string().required().label('Phone Nmber'),
         isGold: Joi.boolean().optional()
     });
@@ -29,15 +30,16 @@ function validateMovie(movie) {
         dailyRentalRate: Joi.number().required().min(0).max(10).label('Rate'),
         publishDate: Joi.date().optional(),
         like: Joi.boolean().optional(),
-        imageUrl: Joi.string().required()
+        imageUrl: Joi.string().uri().required()
     });
     return schema.validate(movie);
 }
 
 function validateRental(rental) {
     const schema = Joi.object({
-        customerId: Joi.string().required().label('Customer Id'),
-        movieId: Joi.string().required().label('Movie Id')
+        customerEmail: Joi.string().email().required().trim().label("Customer Email"),
+        movieId: Joi.string().required().trim(),
+        dateReturned: Joi.date().required().label('Return Date')
     });
     return schema.validate(rental);
 }
@@ -46,6 +48,7 @@ function validateUser(user) {
     const schema = Joi.object({
         name: Joi.string().trim().required().min(3).max(64).label('Name'),
         email: Joi.string().trim().email().required().min(3).max(255).label('Email'),
+        phone: Joi.string().trim().required().min(6).max(16).label('Phone'),
         password: Joi.string().trim().required().min(6).max(1024).label('Password')
     });
     return schema.validate(user);

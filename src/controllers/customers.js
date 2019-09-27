@@ -32,6 +32,7 @@ router.post('/', async (req, res, next) => {
         }
         const customer = new Customer({
             name: req.body.name,
+            email: req.body.email,
             phone: req.body.phone,
             isGold: req.body.isGold
         });

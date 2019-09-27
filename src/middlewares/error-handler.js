@@ -2,6 +2,7 @@ const { errorLogger } = require('../utils/logger');
 
 // Express Error Handler
 const expressErrorHandler = function (err, req, res, next) {
+    console.log(err);
     errorLogger.log({ level: "error", message: err });
     res.status(500)
         .json({ status: 500, body: err.message || "Internal Server Error" });

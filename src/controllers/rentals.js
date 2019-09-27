@@ -10,8 +10,6 @@ Fawn.init(mongoose);
 router.get('/', async (req, res, next) => {
     try {
         const rentals = await Rental.find()
-            .populate('customer', '-__v')
-            .populate('movie', '-__v')
             .select('-__v').sort('-dateOut');
         return res.status(200).json(rentals);
     } catch (exc) {
@@ -40,7 +38,7 @@ router.post('/', async (req, res, next) => {
         if (error) {
             return res.status(404).json({ error: 1, message: error.details[0].message });
         }
-        const customer = await Customer.findById(req.body.customerId);
+        const customer = await Customer.find({ email: { $eq: req.body.customerEmail } });
         if (!customer) {
             return res.status(404).json({ error: 1, message: 'Invalid customer.' });
         }
@@ -52,10 +50,21 @@ router.post('/', async (req, res, next) => {
             return res.status(400).json({ error: 1, message: 'Movies no in stock.' });
         }
         const rental = new Rental({
-            customer: req.body.customerId,
-            movie: req.body.movieId,
-            rentalFee: movie.dailyRentalRate
+            customer: {
+                name: customer[0].name,
+                email: customer[0].email,
+            },
+            movie: {
+                title: movie.title,
+                numberInStock: movie.numberInStock,
+                dailyRentalRate: movie.dailyRentalRate,
+                imageUrl: movie.imageUrl,
+                genre: movie.genre.name,
+                publishDate: movie.publishDate
+            },
+            dateReturned: req.body.dateReturned
         });
+
         await Fawn.Task()
             .save('rentals', rental)
             .update('movies', { _id: movie._id }, {

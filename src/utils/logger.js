@@ -18,7 +18,7 @@ const errorLogger = createLogger({
     format: format.combine(
         format.timestamp(),
         format.printf(
-            info => `${info.timestamp} => ${info.level}: ${info.message}`
+            info => `${info.timestamp} => ${info.level}: ${info.message} ${info.error}`
         )
     ),
     transports: new transports.File({

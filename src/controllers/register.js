@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const { User } = require('../models/models');
 const { validateUser } = require('../utils/validators');
+const Fawn = require('fawn');
 
 router.post('/', async (req, res, next) => {
     try {
@@ -21,7 +22,15 @@ router.post('/', async (req, res, next) => {
             name: req.body.name,
             password: encryptedPassword,
         });
-        user = await user.save();
+
+        await Fawn.Task()
+            .save('users', user)
+            .save('customers', {
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone
+            }).run();
+
         const userToReturn = {
             _id: user._id,
             name: user.name,

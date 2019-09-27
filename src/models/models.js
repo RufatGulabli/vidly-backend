@@ -79,14 +79,48 @@ const Movie = mongoose.model('movies', new mongoose.Schema({
 
 const Rental = mongoose.model('rentals', new mongoose.Schema({
     customer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'customers',
-        required: true
+        name: {
+            type: String,
+            required: true,
+            minlength: 5,
+            maxlength: 64,
+            trim: true
+        },
+        email: {
+            type: String,
+            required: true,
+            trim: true
+        }
     },
     movie: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'movies',
-        required: true
+        title: {
+            type: String,
+            required: true,
+            trim: true,
+            minlength: 3,
+            maxlength: 64
+        },
+        dailyRentalRate: {
+            type: String,
+            min: 0,
+            max: 10,
+            required: true,
+        },
+        imageUrl: {
+            type: String,
+            required: true
+        },
+        genre: {
+            type: String,
+            required: true,
+            minLength: 3,
+            maxLength: 50,
+            trim: true
+        },
+        publishDate: {
+            type: Date,
+            default: Date.UTC
+        }
     },
     dateOut: {
         type: Date,
@@ -94,13 +128,9 @@ const Rental = mongoose.model('rentals', new mongoose.Schema({
         default: Date.now
     },
     dateReturned: {
-        type: Date
-    },
-    // rentalFee: {
-    //     type: Number,
-    //     min: 0,
-    //     required: true
-    // }
+        type: Date,
+        required: true
+    }
 }));
 
 const userSchema = new mongoose.Schema({
@@ -126,6 +156,13 @@ const userSchema = new mongoose.Schema({
         minLength: 6,
         maxLength: 1024
     },
+    phone: {
+        type: String,
+        trim: true,
+        required: true,
+        minLength: 6,
+        maxLength: 16
+    },
     isAdmin: {
         type: Boolean,
         default: false
@@ -137,6 +174,7 @@ userSchema.methods.generateAuthToken = function () {
         _id: this._id,
         email: this.email,
         name: this.name,
+        phone: this.phone,
         isAdmin: this.isAdmin
     }, secretKey, { expiresIn: "1d" });
     return token;

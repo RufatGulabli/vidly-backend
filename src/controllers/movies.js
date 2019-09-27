@@ -45,6 +45,7 @@ router.post('/', [auth], async (req, res, next) => {
             genre: req.body.genre._id,
             numberInStock: req.body.numberInStock,
             dailyRentalRate: req.body.dailyRentalRate,
+            imageUrl: req.body.imageUrl
         });
         const resp = await movie.save();
         return res.status(200).json({ error: 0, message: resp });
