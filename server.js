@@ -4,7 +4,7 @@ const connectToDataBase = require('../src/database/db_connection');
 const app = express();
 require('./routes/routes')(app);
 
-const PORT = process.env.PORT || 8800;
+const PORT = process.env.PORT || 6789;
 
 connectToDataBase.then(() => { }).catch(err => console.error('Could not connect to MongoDB::', err));
 
